@@ -70,6 +70,14 @@ public class Subject implements Serializable {
         this.name = name;
     }
 
+    public int getDvHoctrinh() {
+        return dvHoctrinh;
+    }
+
+    public void setDvHoctrinh(int dvHoctrinh) {
+        this.dvHoctrinh = dvHoctrinh;
+    }
+
     @Override
     public String toString() {
         return "Subject{" +

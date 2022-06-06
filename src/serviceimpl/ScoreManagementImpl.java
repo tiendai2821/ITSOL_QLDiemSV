@@ -172,18 +172,25 @@ public class ScoreManagementImpl implements ScoreManagement {
             }
         }
     }
-//    public static void calculateGPA(){
-//        for(int i=0;i<Main.gpa.length;i++){
-//            if(Main.gpa[i]!=null){
-//                float gpa=0;
-//                int credit=0;
-//                for(int j=0;j<Main.gpa[i].getGpaDetails().length;j++){
-//                    credit+=(Main.gpa[i].getGpaDetails()[j].getSubject().getCredit());
-//                    gpa+=(Main.gpa[i].getGpaDetails()[j].getMark()*Main.gpa[i].getGpaDetails()[j].getSubject().getCredit());
-//
-//                }
-//                System.out.println("Sinh vien "+Main.gpa[i].getStudent().getName()+" có gpa là: "+((float)gpa/credit));
-//            }
-//        }
-//    }
+
+    @Override
+    public void sortScoreTablesBySubjectName() {
+
+    }
+
+    @Override
+    public  void calculateGPA(){
+        for(int i=0;i<MainRun.scoreTables.length;i++){
+            if(MainRun.scoreTables[i]!=null){
+                float gpa=0;
+                int credit=0;
+                for(int j=0;j<MainRun.scoreTables[i].getSubjectScores().length;j++){
+                    credit+=(MainRun.scoreTables[i].getSubjectScores()[j].getSubject().getDvHoctrinh());
+                    gpa+=(MainRun.scoreTables[i].getSubjectScores()[j].getScore()*MainRun.scoreTables[i].getSubjectScores()[j].getSubject().getMaMh());
+
+                }
+                System.out.println("Sinh vien "+MainRun.scoreTables[i].getStudent().getName()+" có gpa là: "+((float)gpa/credit));
+            }
+        }
+    }
 }

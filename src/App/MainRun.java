@@ -51,13 +51,13 @@ public class MainRun {
                     scoreManagement.addScoreTableAndShow();
                     break;
                 case 4:
-                    scoreManagement.s
+                    scoreManagement.sortScoreTablesByName();
                     break;
                 case 5:
-                    //
+                    scoreManagement.sortScoreTablesBySubjectName();
                     break;
                 case 6:
-                    //
+                    scoreManagement.calculateGPA();
                     break;
                 case 7:
                     System.out.println("Tks for use our system");

@@ -27,4 +27,12 @@ public class ScoreTable implements Serializable {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    public SubjectScore[] getSubjectScores() {
+        return subjectScores;
+    }
+
+    public void setSubjectScores(SubjectScore[] subjectScores) {
+        this.subjectScores = subjectScores;
+    }
 }
