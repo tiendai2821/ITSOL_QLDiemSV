@@ -35,7 +35,7 @@ public class MainRun {
         MainRun.subjects = DataUtil.isNullOrEmpty(subjectsFromFile)? new Subject[1000]:(Subject[]) subjectsFromFile;
         Object scoreTablesFromFile = new FileUtil().readDataFromFile(MainRun.scoreTablesFile);
         MainRun.scoreTables = DataUtil.isNullOrEmpty(scoreTablesFromFile)? new ScoreTable[1000]:(ScoreTable[]) scoreTablesFromFile;
-        System.out.println(scoreTables[0]);
+        System.out.println(scoreTables.length);
     }
     private static void Menu(){
         while(true){
@@ -68,7 +68,7 @@ public class MainRun {
     private static int function(){
         System.out.println("\n\nHỆ THỐNG QUẢN LÝ ĐIỂM CHO SINH VIÊN \n\n");
         System.out.println("1. Nhập danh sách sinh viên mới và in ra danh sách sinh viên.");
-        System.out.println("2. In ra danh sách mô học mới và in ra danh sách môn học.");
+        System.out.println("2. Nhập danh sách mô học mới và in ra danh sách môn học.");
         System.out.println("3. Nhập điểm cho sinh viên trong hệ thống.");
         System.out.println("4. Sắp xếp danh sách bảng điểm theo họ tên sinh viên.");
         System.out.println("5. Sắp xếp danh sách bảng điểm theo tên môn học");

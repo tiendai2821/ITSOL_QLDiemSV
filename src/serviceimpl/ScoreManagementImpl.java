@@ -25,7 +25,6 @@ public class ScoreManagementImpl implements ScoreManagement {
         int studentID;
         do {
             try {
-
                 studentID = Integer.parseInt(new Scanner(System.in).next());
                 if (searchStudentByID(studentID) != null)
                     break;
@@ -46,7 +45,7 @@ public class ScoreManagementImpl implements ScoreManagement {
                 System.out.print("Số lượng môn học phải là số nguyên dương vui lòng nhập lại: ");
             }
         }while (true);
-        SubjectScore[] subjectScores=new SubjectScore[n];
+        SubjectScore subjectScore = new SubjectScore();
         for(int i=0;i<n;i++) {
             System.out.print("Nhập mã môn học thứ " + (i + 1) + " : ");
             int subjectID;
@@ -54,7 +53,7 @@ public class ScoreManagementImpl implements ScoreManagement {
                 try {
 
                     subjectID = Integer.parseInt(new Scanner(System.in).next());
-                    if (searchSubjectByID(subjectID) != null && checkSameSubject(subjectScores, subjectID))
+                    if (searchSubjectByID(subjectID) != null && checkSameSubject(studentID, subjectID))
                         break;
                     System.out.print("Mã môn học không tồn tại hoặc bị trùng vui lòng nhập lại: ");
                 } catch (NumberFormatException e) {
@@ -77,22 +76,25 @@ public class ScoreManagementImpl implements ScoreManagement {
             SubjectScore g=new SubjectScore();
             g.setSubject(searchSubjectByID(subjectID));
             g.setScore(score);
-            subjectScores[i]=g;
 
-        }
-        for(int i=0;i<MainRun.scoreTables.length;i++) {
-            if (MainRun.scoreTables[i] == null) {
-                ScoreTable st=new ScoreTable(searchStudentByID(studentID),subjectScores);
-                MainRun.scoreTables[i]=st;
-                break;
+            for(int j=0;j<MainRun.scoreTables.length;j++) {
+                if (MainRun.scoreTables[j] == null) {
+                    ScoreTable st=new ScoreTable(searchStudentByID(studentID),g);
+                    MainRun.scoreTables[j]=st;
+
+                    break;
+                }
             }
         }
+
         FileUtil fileUtil = new FileUtil();
         fileUtil.writeDataToFile(MainRun.scoreTables,MainRun.scoreTablesFile);
 
         for(int i=0;i<MainRun.scoreTables.length;i++){
-            if(MainRun.scoreTables[i]!=null)
+            if(MainRun.scoreTables[i]!=null){
                 System.out.println(MainRun.scoreTables[i]);
+            }
+
         }
     }
     // check data
@@ -134,11 +136,12 @@ public class ScoreManagementImpl implements ScoreManagement {
         return null;
     }
     // check same subject ( xem lại )
-    private boolean checkSameSubject(SubjectScore[] subjectScores, int id){
-        for(int i=0;i<subjectScores.length;i++){
-            if(subjectScores[i]!=null) {
-                if (subjectScores[i].getSubject().getMaMh() == id)
+    private boolean checkSameSubject(int studentId, int subjectId){
+        for(int i=0;i<MainRun.scoreTables.length;i++){
+            if(MainRun.scoreTables[i]!=null) {
+                if (MainRun.scoreTables[i].getStudent().getMaSV() == studentId && MainRun.scoreTables[i].getSubjectScore().getSubject().getMaMh() == subjectId){
                     return false;
+                }
             }
         }
         return true;
@@ -175,22 +178,61 @@ public class ScoreManagementImpl implements ScoreManagement {
 
     @Override
     public void sortScoreTablesBySubjectName() {
-
-    }
-
-    @Override
-    public  void calculateGPA(){
-        for(int i=0;i<MainRun.scoreTables.length;i++){
-            if(MainRun.scoreTables[i]!=null){
-                float gpa=0;
-                int credit=0;
-                for(int j=0;j<MainRun.scoreTables[i].getSubjectScores().length;j++){
-                    credit+=(MainRun.scoreTables[i].getSubjectScores()[j].getSubject().getDvHoctrinh());
-                    gpa+=(MainRun.scoreTables[i].getSubjectScores()[j].getScore()*MainRun.scoreTables[i].getSubjectScores()[j].getSubject().getMaMh());
+        for(int i=0;i<MainRun.scoreTables.length-1;i++){
+            ScoreTable sti=MainRun.scoreTables[i];
+            if(sti!=null){
+                for (int j=i+1;j<MainRun.scoreTables.length;j++){
+                    ScoreTable stj=MainRun.scoreTables[j];
+                    if(stj!=null){
+                        if(sti.getSubjectScore().getSubject().getName().compareTo(stj.getSubjectScore().getSubject().getName())>0){
+                            ScoreTable tmp=sti;
+                            MainRun.scoreTables[i]=stj;
+                            MainRun.scoreTables[j]=tmp;
+                        }
+                    }
 
                 }
-                System.out.println("Sinh vien "+MainRun.scoreTables[i].getStudent().getName()+" có gpa là: "+((float)gpa/credit));
+            }
+            else {
+                break;
+            }
+        }
+        for( int i = 0; i<MainRun.scoreTables.length; i++){
+            if(MainRun.scoreTables[i] !=null){
+                System.out.println(MainRun.scoreTables[i]);
+            }else{
+                break;
             }
         }
     }
+
+    @Override
+    public void calculateGPA() {
+        int sotc = 0;
+        float tongdiem = 0;
+        System.out.println("Nhập mã sinh viên muốn tính điểm: ");
+        int studentId;
+        do{
+            try{
+                studentId = Integer.parseInt(new Scanner(System.in).next());
+                if(searchStudentByID(studentId) == null ){
+                    System.out.println("Mã sinh viên không tồn tại: ");
+                }
+                else {
+                    break;
+                }
+            }catch (NumberFormatException e){
+                System.out.println("Mã sinh viên phải là số nguyên dương");
+            }
+        }while (true);
+        for(int i = 0 ; i<MainRun.scoreTables.length; i++){
+            if(MainRun.scoreTables[i] == null) break;
+            if(MainRun.scoreTables[i].getStudent().getMaSV() == studentId){
+                tongdiem += MainRun.scoreTables[i].getSubjectScore().getScore()*MainRun.scoreTables[i].getSubjectScore().getSubject().getDvHoctrinh();
+                sotc += MainRun.scoreTables[i].getSubjectScore().getSubject().getDvHoctrinh();
+            }
+        }
+        System.out.println("Điểm trung bình của sinh viên có mã "+ studentId+" là: "+(tongdiem/(float)sotc));
+    }
+
 }

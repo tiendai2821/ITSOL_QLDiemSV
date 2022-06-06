@@ -5,18 +5,18 @@ import java.util.Arrays;
 
 public class ScoreTable implements Serializable {
     private Student student;
-    private SubjectScore[] subjectScores;
+    private SubjectScore subjectScore;
 
-    public ScoreTable(Student student, SubjectScore[] subjectScores) {
+    public ScoreTable(Student student, SubjectScore subjectScore) {
         this.student = student;
-        this.subjectScores = subjectScores;
+        this.subjectScore = subjectScore;
     }
 
     @Override
     public String toString() {
         return "ScoreTable{" +
                 "studentId=" + student.getMaSV() +
-                ", subjectScores=" + Arrays.toString(subjectScores) +
+                ", subjectScore=" + this.subjectScore +
                 '}';
     }
 
@@ -28,11 +28,11 @@ public class ScoreTable implements Serializable {
         this.student = student;
     }
 
-    public SubjectScore[] getSubjectScores() {
-        return subjectScores;
+    public SubjectScore getSubjectScore() {
+        return subjectScore;
     }
 
-    public void setSubjectScores(SubjectScore[] subjectScores) {
-        this.subjectScores = subjectScores;
+    public void setSubjectScores(SubjectScore subjectScore) {
+        this.subjectScore = subjectScore;
     }
 }
